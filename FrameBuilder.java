@@ -1,15 +1,32 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.lang.reflect.GenericArrayType;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * <i>FrameBuilder is just a simple class for create JFrame</i>
+ * @author WarzouMc
+ */
 
 public class FrameBuilder {
 
     private JFrame jFrame;
 
+    /**
+     * Instance without parameter
+      */
     public FrameBuilder(){
         jFrame = new JFrame();
     }
 
+    /**
+     * Instance with JFrame parameter
+     * @param jFrame
+     */
     public FrameBuilder(JFrame jFrame){
         this.jFrame = jFrame;
     }
@@ -125,6 +142,83 @@ public class FrameBuilder {
         JLabel jLabel = new JLabel(new ImageIcon(path));
         jFrame.add(jLabel);
         jLabel.setLayout(new FlowLayout());
+        return this;
+    }
+
+    /**
+     * add JMenuBar with name
+     * @param name
+     * @return
+     */
+    public FrameBuilder setJMenuBar(String name){
+        JMenuBar jMenuBar = new JMenuBar();
+        JMenu menu = new JMenu(name);
+        jMenuBar.add(menu);
+        jFrame.setJMenuBar(jMenuBar);
+        return this;
+    }
+
+    /**
+     * add JMenuBar with name and menu icon
+     * Icons precision : set null for no icon
+     * @param name
+     * @return
+     */
+    public FrameBuilder setJMenuBar(String name, String menuIcon){
+        JMenuBar jMenuBar = new JMenuBar();
+        JMenu menu = new JMenu(name);
+        if (!menuIcon.equalsIgnoreCase("null")) {
+            menu.setIcon(new ImageIcon(menuIcon));
+        }
+        jMenuBar.add(menu);
+        jFrame.setJMenuBar(jMenuBar);
+        return this;
+    }
+
+    /**
+     * add JMenuBar with name, menu icon and submenus
+     * Icons precision : set null for no icon
+     * @param name
+     * @return
+     */
+    public FrameBuilder setJMenuBar(String name, String menuIcon, List<String> menuItemString){
+        JMenuBar jMenuBar = new JMenuBar();
+        JMenu menu = new JMenu(name);
+        for (String string : menuItemString) {
+            JMenuItem jMenuItem = new JMenuItem(string);
+            menu.add(jMenuItem);
+        }
+        jMenuBar.add(menu);
+        jFrame.setJMenuBar(jMenuBar);
+        return this;
+    }
+
+    /**
+     * add JMenuBar with name, menu icon, submenus and submenus icon
+     * Icons precision : set null for no icon
+     * @param name
+     * @return
+     */
+    public FrameBuilder setJMenuBar(String name, String menuIcon, List<String> menuItemString, List<String> menuItemIcon){
+        JMenuBar jMenuBar = new JMenuBar();
+        JMenu menu = new JMenu(name);
+        if (!menuIcon.equalsIgnoreCase("null")) {
+            menu.setIcon(new ImageIcon(menuIcon));
+        }
+        Map<String, String> menuItemLogo = new HashMap<>();
+        for (int i = 0; i < menuItemString.size(); i++) {
+            menuItemLogo.put(menuItemString.get(i), menuItemIcon.get(i));
+        }
+        
+        for (Map.Entry<String, String> entry : menuItemLogo.entrySet()) {
+            JMenuItem jMenuItem = new JMenuItem(entry.getKey());
+            if (!entry.getValue().equalsIgnoreCase("null")){
+                jMenuItem.setIcon(new ImageIcon(entry.getValue()));
+            }
+            menu.add(jMenuItem);
+        }
+        jMenuBar.add(menu);
+        jFrame.setJMenuBar(jMenuBar);
         return this;
     }
 
