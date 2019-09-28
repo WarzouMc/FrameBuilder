@@ -106,7 +106,7 @@ public class FrameBuilder {
      * @param b
      * @return
      */
-    public FrameBuilder setResiable(boolean b){
+    public FrameBuilder setResizable(boolean b){
         jFrame.setResizable(b);
         return this;
     }
@@ -146,12 +146,24 @@ public class FrameBuilder {
     }
 
     /**
+     * Apply an existent JLabel
+     * @param jLabel
+     * @return
+     */
+    public FrameBuilder setJLabel(JLabel jLabel){
+        jFrame.add(jLabel);
+        jLabel.setLayout(new FlowLayout());
+        return this;
+    }
+
+    /**
      * add JMenuBar with name
      * @param name
      * @return
      */
     public FrameBuilder setJMenuBar(String name){
         JMenuBar jMenuBar = new JMenuBar();
+        if (jFrame.getJMenuBar() != null) jMenuBar = jFrame.getJMenuBar();
         JMenu menu = new JMenu(name);
         jMenuBar.add(menu);
         jFrame.setJMenuBar(jMenuBar);
@@ -166,6 +178,7 @@ public class FrameBuilder {
      */
     public FrameBuilder setJMenuBar(String name, String menuIcon){
         JMenuBar jMenuBar = new JMenuBar();
+        if (jFrame.getJMenuBar() != null) jMenuBar = jFrame.getJMenuBar();
         JMenu menu = new JMenu(name);
         if (!menuIcon.equalsIgnoreCase("null")) {
             menu.setIcon(new ImageIcon(menuIcon));
@@ -183,6 +196,7 @@ public class FrameBuilder {
      */
     public FrameBuilder setJMenuBar(String name, String menuIcon, List<String> menuItemString){
         JMenuBar jMenuBar = new JMenuBar();
+        if (jFrame.getJMenuBar() != null) jMenuBar = jFrame.getJMenuBar();
         JMenu menu = new JMenu(name);
         for (String string : menuItemString) {
             JMenuItem jMenuItem = new JMenuItem(string);
@@ -201,6 +215,7 @@ public class FrameBuilder {
      */
     public FrameBuilder setJMenuBar(String name, String menuIcon, List<String> menuItemString, List<String> menuItemIcon){
         JMenuBar jMenuBar = new JMenuBar();
+        if (jFrame.getJMenuBar() != null) jMenuBar = jFrame.getJMenuBar();
         JMenu menu = new JMenu(name);
         if (!menuIcon.equalsIgnoreCase("null")) {
             menu.setIcon(new ImageIcon(menuIcon));
