@@ -1,8 +1,5 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.lang.reflect.GenericArrayType;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +7,8 @@ import java.util.Map;
 /**
  * <i>FrameBuilder is just a simple class for create JFrame</i>
  * @author WarzouMc
+ *
+ * @ClassNeed LabelBuilder :
  */
 
 public class FrameBuilder {
@@ -37,6 +36,31 @@ public class FrameBuilder {
      */
     public FrameBuilder clone(){
         return new FrameBuilder(jFrame);
+    }
+
+    public FrameBuilder default_(){
+        int width = (int) (GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width/1.2);
+        int height = (int) (GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height/1.2);
+        return new FrameBuilder()
+                .setTitle("Default Title")
+                .setXAndZSize(width, height)
+                .setLocationRelativeTo(null)
+                .setBackground(Color.DARK_GRAY)
+                .visible(true);
+    }
+
+    public FrameBuilder setMaxXandZSizeFromWindowsSize(){
+        int width = (int) (GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width/1.0);
+        int height = (int) (GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height/1.0);
+        setXAndZSize(width, height);
+        return this;
+    }
+
+    public FrameBuilder setMaxXandZSizeFromDivWindowsSize(float div){
+        int width = (int) (GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width/div);
+        int height = (int) (GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height/div);
+        setXAndZSize(width, height);
+        return this;
     }
 
     /**
@@ -77,6 +101,16 @@ public class FrameBuilder {
      */
     public FrameBuilder setXAndZSize(int xSize, int zSize){
         jFrame.setSize(xSize, zSize);
+        return this;
+    }
+
+    /**
+     * Show/hide (true/false) top of your frame
+     * @param b
+     * @return
+     */
+    public FrameBuilder setDecorated(boolean b){
+        jFrame.setUndecorated(!b);
         return this;
     }
 
@@ -133,26 +167,12 @@ public class FrameBuilder {
     }
 
     /**
-     * Set background image
-     * @param path
-     * @return
-     */
-    public FrameBuilder setBackground(String path){
-        jFrame.setLayout(new BorderLayout());
-        JLabel jLabel = new JLabel(new ImageIcon(path));
-        jFrame.add(jLabel);
-        jLabel.setLayout(new FlowLayout());
-        return this;
-    }
-
-    /**
      * Apply an existent JLabel
      * @param jLabel
      * @return
      */
     public FrameBuilder setJLabel(JLabel jLabel){
         jFrame.add(jLabel);
-        jLabel.setLayout(new FlowLayout());
         return this;
     }
 
@@ -257,8 +277,16 @@ public class FrameBuilder {
      * Open the frame to the user
      */
     public FrameBuilder visible(boolean b){
-        jFrame.setVisible(b);
+        try{
+            jFrame.setVisible(b);
+        }catch (NullPointerException exeption){
+            new FrameBuilder().default_();
+        }
         return this;
+    }
+
+    public LabelBuilder callLabelBuilder(){
+        return new LabelBuilder(this);
     }
 
     /**
